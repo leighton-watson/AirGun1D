@@ -1,22 +1,22 @@
-%% MAKE FIG 3 Space Time %%
+%% MAKE FIG 4 SPACE TIME %%
 %
-% Make figure for Euler air gun "Geophysics" paper
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
 %
-% Simulate air gun dynamics. Plot space time plots showing density,
-% velocity and pressure inside the air gun chamber
+% Display 1D air gun simulation results. Plot space time plots showing 
+% density, temperature, pressure, speed of sound, velocity and Mach
+% number inside the air gun chamber
 
-clear all;
-clc;
-%close all;
+clear all; clc;
+set(0,'DefaultLineLineWidth',3);
+set(0,'DefaultAxesFontSize',24);
 
+% add code directories
 addpath ../SBPSAT
 addpath ../SeismicAirgunCode
 
-set(0,'DefaultLineLineWidth',3);
-set(0,'DefaultAxesFontSize',24);
-%colormap(makecmap('black',40,10,10));
+% set color map
 colormap(makecmap('dodgerblue',40,20,10));
-%colormap([makecmap('orangered',50,20,20);flipud(makecmap('tomato',50,20,20))]);
 cmap = get(gca,'ColorOrder');
 
 %% Run Euler Air Gun Simulation %%
@@ -81,7 +81,6 @@ set(h,'FontSize',24);
 set(h,'Color',[1 1 1]);
 set(h,'FontWeight','bold');
 
-
 subplot(3,2,3); % pressure
 pa2psi = 0.000145038; % conversion from pa to psi
 h = surf(X,T*1000,p*pa2psi);
@@ -130,10 +129,6 @@ subplot(3,2,5);
 plot3(xc,t*1000,zc,'r--');
 plot3(xc2,t*1000,zc,'r--');
 
-% print -dpdf painters 'Fig3_SpaceTime';
-% print -dpng 'Fig3_SpaceTime';
-
-%% Speed of Sound and Temperature %%
 subplot(3,2,2); % temperature
 h = surf(X,T*1000,temp);
 view(2); shading interp;

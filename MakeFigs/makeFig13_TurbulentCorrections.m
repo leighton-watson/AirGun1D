@@ -1,16 +1,27 @@
-%% DATA SIM COMPARE %%
+%% MAKE FIG 13 TURBULENT CORRECTIONS %%
 %
-% Turbulent corrections
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
+%
+% Compare data and simulation results for model with turbuluent corrections
+% added.
+%
+% For information about the data see Ronen and Chelminski (2018) A next 
+% generation seismic source with low frequency signal and low 
+% environmental impact, 80th EAGE Conference & Exhibition. 
+% doi:10.3997/2214-4609.201800745
 
-clear all;
-clc;
-
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/598ci/FarField'
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/50ci/FarField'
-
+clear all; clc;
 set(0,'DefaultLineLineWidth',3);
 set(0,'DefaultAxesFontSize',24);
 cmap = get(gca,'ColorOrder');
+
+% add directories
+addpath ../Data
+addpath ../SeismicAirgunCode/
+addpath ../SBPSAT/
+addpath ../SBPSAT/Turbulence/
+
 
 figHand1 = figure(1); clf;
 set(figHand1,'Position',[100 100 600 700]);
@@ -39,12 +50,7 @@ ylabel('bar m');
 
 dmax = max(pData*1e-5*r);
 
-%% Simulation %%
-
-addpath ../SBPSAT
-addpath ../SeismicAirgunCode
-
-%% Run Euler Air Gun Simulation %%
+%% Run 1D Air Gun Simulation %%
 
 nx = 50; % number of grid points per 1 m of air gun length
 
@@ -110,8 +116,6 @@ xlim([0 300]);
 ylabel('m/s');
 ylim([-15 35]);
 xlabel('Time (ms)');
-%legend('$\alpha = 0$','$\alpha = 2$','$\alpha = \dot{R}$','$\alpha = 5 \dot{R}$',...
-%    'interpreter','latex');
 
 subplot(3,1,[1 2]);
 xlim([0 300]);

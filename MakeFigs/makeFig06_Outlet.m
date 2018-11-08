@@ -1,21 +1,19 @@
-%% MAKE FIG 5 Output %%
+%% MAKE FIG 6 OUTLET %%
 %
-% Make figure for Euler air gun "Geophysics" paper
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
 %
-% Simulate air gun dynamics. Plot properties at the port. Compare numerical
-% and analytical solutions.
+% Display 1D air gun simulation results. Plot properties at outlet and
+% compare to analytical solutions.
 
-clear all;
-clc;
-%close all;
+clear all; clc;
+set(0,'DefaultLineLineWidth',3);
+set(0,'DefaultAxesFontSize',24);
 
+% add code directories
 addpath ../SBPSAT
 addpath ../SeismicAirgunCode
 
-set(0,'DefaultLineLineWidth',3);
-set(0,'DefaultAxesFontSize',24);
-colormap(makecmap('black',40,10,10));
-%colormap([makecmap('orangered',50,20,20);flipud(makecmap('tomato',50,20,20))]);
 cmap = get(gca,'ColorOrder');
 
 %% Run Euler Air Gun Simulation %%

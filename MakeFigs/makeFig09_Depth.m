@@ -1,20 +1,24 @@
-%% DEPTH %%
+%% MAKE FIG 9 DEPTH %%
+%
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
+%
+% Display 1D air gun simulation results for a range of depths. Display
+% acoustic pressure and plot source signature metrics (rise time, slope and
+% peak pressure)
 
+clear all; clc;
+set(0,'DefaultLineLineWidth',3);
+set(0,'DefaultAxesFontSize',24);
 
-clear all;
-clc;
-%close all;
-
+% add code directories
 addpath ../SBPSAT
 addpath ../SeismicAirgunCode
 
-set(0,'DefaultLineLineWidth',3);
-set(0,'DefaultAxesFontSize',24);
 cmap = get(gca,'ColorOrder');
 
-figure(1); clf;
-figHand2 = figure(2); clf;
-set(figHand2,'Position',[100 100 600 600]);
+figHand1 = figure(1); clf;
+set(figHand1,'Position',[100 100 600 600]);
 
 
 %% Run Euler Air Gun Simulation %%
@@ -35,12 +39,14 @@ gamma = 1.4; % ratio of heat capacities
 Q = 287.06; % specific gas constant for dry air [J/kgK]
 T_inf = 288; % temperature assumed constant throughout the system [K]
 
-aD_plot = [5 7.5 10 15 25];
-aD = [5 6 7.5 9 10 12.5 15 17.5 20 22.5 25];
+aD_plot = [5 7.5 10 15 25]; % depths to plot
+aD = [5 6 7.5 9 10 12.5 15 17.5 20 22.5 25]; % depths to compute
 
-aP = 1020;
-aL = 1.2;
-aA = 12.5;
+% air gun properties
+aP = 1020; % pressure [Pa]
+aL = 1.2; % length [m]
+aA = 12.5; % cross-sectional area [in^2]
+
 j = 1;
 for i = 1:length(aD)
     
@@ -55,12 +61,6 @@ for i = 1:length(aD)
     U = sol.y(2,:); % bubble wall velocity [m/s]
     m = sol.y(3,:); % bubble mass [kg]
     
-    figure(1);
-    plot(t*1000, R);
-    xlim([0 10])
-    hold on;
-    title('Mass');
-    
     [~,solDY] = deval(sol, t);
     A = solDY(2,:); % acceleration
     [tDir, pDir] = pressure_eqn(t', R', U', A', rho_inf, c_inf, r); % direct pressure perturbation
@@ -68,7 +68,7 @@ for i = 1:length(aD)
     if ismember(aD(i), aD_plot)
         
         % pressure perturbation
-        figure(2);
+        figure(1);
         subplot(2,1,1);
         plot((tDir-r/c_inf)*1000,pDir*1e-5*r);
         hold on;
@@ -86,7 +86,7 @@ for i = 1:length(aD)
  
 end
 
-%% 
+%% Format figures %%
 
 subplot(2,1,2);
 plot(aD, riseTime,'k-');
@@ -96,7 +96,6 @@ plot(aD, ppeak,'k:');
 xlim([min(aD), max(aD)]);
 xlabel('Air Gun Depth (m)');
 legend('Rise Time (ms)','Slope (bar m/ms)','Peak Pressure (bar m)');
-%ylim([0 6])
 h = text(150,5.2,'(c)');
 set(h,'FontSize',24);
 set(h,'FontWeight','bold');

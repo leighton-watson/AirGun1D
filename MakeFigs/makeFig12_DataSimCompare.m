@@ -1,17 +1,25 @@
-%% DATA SIM COMPARE %%
+%% MAKE FIG 12 DATA SIM COMPARE %%
+%
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
+%
+% Compare data and simulation results. Simulations results are for both 1D
+% air gun model and lumped parameter model
+%
+% For information about the data see Ronen and Chelminski (2018) A next 
+% generation seismic source with low frequency signal and low 
+% environmental impact, 80th EAGE Conference & Exhibition. 
+% doi:10.3997/2214-4609.201800745
 
-clear all;
-clc;
-%close all;
-
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/598ci/FarField'
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/50ci/FarField'
-
-
+clear all; clc;
 set(0,'DefaultLineLineWidth',3);
 set(0,'DefaultAxesFontSize',24);
 cmap = get(gca,'ColorOrder');
 
+% add directories
+addpath ../Data
+addpath ../SeismicAirgunCode/
+addpath ../SBPSAT/
 
 figHand1 = figure(1); clf;
 set(figHand1,'Position',[100 100 600 500]);
@@ -21,21 +29,12 @@ Fs = 1/dt; % sampling frequency [Hz]
 
 r = 75; % distance from source to receiver [m]
 
-%% Vary pressure %%
-% dataStr = {'155_0500cm_1030psi_598ci_DHA.csv',...
-%     '156_0500cm_1040psi_598ci_DHA.csv',...
-%     '157_0500cm_1030psi_598ci_DHA.csv',...
-%     '158_0500cm_1020psi_598ci_DHA.csv',...
-%     '159_0500cm_1030psi_598ci_DHA.csv',...
-%     '160_0500cm_1030psi_598ci_DHA.csv'};
+%% Data %%
 
-%dataStr = {'188_0750cm_1030psi_598ci_DHA.csv'};
 dataStr = {'219_1000cm_1030psi_598ci_DHA.csv'};
 
-
-tshift = 91-0.73;
-%tshift = [1.094 0.7188 1 0.75 0.8438 0.9688]+91; %[0 1.269 1.45 0.3 0.77];    
-pshift = [0]; %[-0.005 0.004 -0.004 -0.004 -0.008];
+tshift = 91-0.73; % shift in time
+pshift = [0]; % shift in constant pressure
 data = csvread(dataStr{1});
 pData = data(:,1);
 
@@ -46,15 +45,7 @@ plot(tdata*1000-tshift,pData*1e-5*r+pshift,'k');
 hold on;
 xlim([0 400])
 
-
-
-
-%% Simulation %%
-
-addpath ../SBPSAT
-addpath ../SeismicAirgunCode
-
-%% Run Euler Air Gun Simulation %%
+%% Run 1D Air Gun Simulation %%
 
 nx = 100; % number of grid points per 1 m of air gun length
 
@@ -77,7 +68,6 @@ aL = 1.2; % air gun length [m]
 aA = 12.5; % air gun port area [in^2] % cross-sectional area = port area
 aD = 10; % air gun depth [m]
 
-
 sol = runEulerCode(nx, aP, aL, aA, aD);
 
 t = sol.x; % time
@@ -89,9 +79,6 @@ m = sol.y(3,:); % bubble mass [kg]
 [~,solDY] = deval(sol, t);
 A = solDY(2,:); % acceleration
 [tDir, pDir] = pressure_eqn(t', R', U', A', rho_inf, c_inf, r); % direct pressure perturbation
-%%% include ghost % mismatch between data and simulation during decay
-%%% of peak may be due to treatment of the ghost. Have not been
-%%% including the ghost
 [tGhost, pGhost] = pressure_eqn(t', R', U', A', rho_inf, c_inf, ... %ghost
     r + 2*aD);
 dt = 1e-5;
@@ -100,16 +87,13 @@ pDirInterp = pchip(tDir, pDir, tInterp);
 pGhostInterp = pchip(tGhost, pGhost, tInterp);
 pPres = pDirInterp - pGhostInterp;
 
-% plot((tInterp-r/c_inf)*1000+2,pPres*1e-5*r,'Color',cmap(1,:)); %,'LineStyle','--','Color',cmap(i,:));
-
-%xlim([-0.5 8.5])
 xlim([0 400]);
 ylim([-2.5 4]);
 xlabel('Time (ms)');
 ylabel('bar m');
 title('Acoustic Pressure');
 
-%% Plot lumped paramter model %%
+%% Lumped Parameter Model %%
 
 m_in = 39.3701; % conversion from m to in
 aV = aL*m_in * aA; % air gun volume [in^3]
@@ -117,26 +101,29 @@ input = [aP, aV, aA]; % inputs for lumped parameter model [pressure, volume, por
 physConst = physical_constants(aD,r); % save physical constants. Specific depth and distance from source to receiver
 output = AirgunBubbleSolveOutput(input, physConst, false); % solve lumped parameter model
 
-% longer time series of pressure perturbation
+%% Plotting %%
 
-h = plot((output.tPres-r/physConst.c_infty)*1000+2,output.pPres*1e-5*r,...
+%%% Time series of acoustic pressure %%%
+
+% lumped paramter
+plot((output.tPres-r/physConst.c_infty)*1000+2,output.pPres*1e-5*r,...
     'Color',cmap(2,:),'LineStyle','-');
-%h.Color(4) = alpha;
-%xlim([tmin tmax2]);
-%hold on;
 
-
+% 1D air gun model
 plot((tInterp-r/c_inf)*1000+2,pPres*1e-5*r,'Color',cmap(1,:)); %,'LineStyle','--','Color',cmap(i,:));
 
 
-%% Plot zoom in on peak
-
+%%% Zoom in on initial peak %%%
 handaxes1 = axes('Position',[0.5 0.6 0.35 0.3]);
-plot(tdata*1000-tshift,pData*1e-5*r+pshift,'k');
 
+% data
+plot(tdata*1000-tshift,pData*1e-5*r+pshift,'k');
 hold on;
 xlim([0 10]);
 
+% lumped parameter
 h = plot((output.tPres-r/physConst.c_infty)*1000+2,output.pPres*1e-5*r,...
     'Color',cmap(2,:),'LineStyle','-');
+
+% 1D air gun model
 plot((tInterp-r/c_inf)*1000+2,pPres*1e-5*r,'Color',cmap(1,:)); %,'LineStyle','--','Color',cmap(i,:));

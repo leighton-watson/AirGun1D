@@ -1,10 +1,22 @@
-%% DATA %%
+%% MAKE FIG 16 DATA PRECUSOR %%
+%
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
+%
+% Plot zoom of preliminary peak in acoustic pressure before main peak.
+%
+% For information about the data see Ronen and Chelminski (2018) A next 
+% generation seismic source with low frequency signal and low 
+% environmental impact, 80th EAGE Conference & Exhibition. 
+% doi:10.3997/2214-4609.201800745
 
-clear all;
-
+clear all; clc;
 set(0,'DefaultLineLineWidth',3);
 set(0,'DefaultAxesFontSize',24);
 cmap = get(gca,'ColorOrder');
+
+% add directories
+addpath ../Data
 
 figHand1 = figure(1); clf;
 set(figHand1,'Position',[100 100 600 300]);
@@ -12,12 +24,9 @@ set(figHand1,'Position',[100 100 600 300]);
 cmap = get(gca,'ColorOrder');
 msize = 8;
 
-%% TIME SERIES %%%
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/598ci/FarField'
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/50ci/FarField'
+%% Plot Data %%
 
 hold on;
-
 m = 32000;
 dt = 31.25e-6;
 t = 0:dt:(m-1)*dt;

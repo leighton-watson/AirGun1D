@@ -1,19 +1,23 @@
-%% LENGTH %%
+%% MAKE FIG 10 LENGTH %%
+%
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
+%
+% Display 1D air gun simulation results. Plot properties at outlet and
+% compare to analytical solutions.
 
+clear all; clc;
+set(0,'DefaultLineLineWidth',3);
+set(0,'DefaultAxesFontSize',24);
 
-clear all;
-clc;
-%close all;
-
+% add code directories
 addpath ../SBPSAT
 addpath ../SeismicAirgunCode
 
-set(0,'DefaultLineLineWidth',3);
-set(0,'DefaultAxesFontSize',24);
 cmap = get(gca,'ColorOrder');
 
-figHand2 = figure(2); clf;
-set(figHand2,'Position',[100 100 600 600]);
+figHand1 = figure(1); clf;
+set(figHand1,'Position',[100 100 600 600]);
 
 
 %% Run Euler Air Gun Simulation %%
@@ -34,15 +38,16 @@ gamma = 1.4; % ratio of heat capacities
 Q = 287.06; % specific gas constant for dry air [J/kgK]
 T_inf = 288; % temperature assumed constant throughout the system [K]
 
-
+% air gun lengths
 aL_plot = [2 1 0.6 0.4 0.2];
-%aL = aL_plot;
 aL = [0.2 0.3 0.4 0.5 0.6 0.8 1 1.2 1.4 1.6 1.8 2];
 aL = fliplr(aL);
 
-aP = 1020;
-aA = 12.5;
-aD = 7.5;
+% air gun properties
+aP = 1020; % pressure [Pa]
+aA = 12.5; % cross-sectional area [in^2]
+aD = 7.5; % depth [m]
+
 j = 1;
 for i = 1:length(aL)
     
@@ -80,7 +85,7 @@ for i = 1:length(aL)
  
 end
 
-%% 
+%% Format Figure %%
 
 subplot(2,1,2);
 plot(aL, riseTime,'k-');
@@ -91,13 +96,9 @@ xlim([min(aL), max(aL)]);
 xlabel('Air Gun Length (m)');
 legend('Rise time (ms)','Slope (bar m/ms)','Peak pressure (bar m)');
 ylim([0 5])
-% h = text(150,5.2,'(c)');
-% set(h,'FontSize',24);
-% set(h,'FontWeight','bold');
 
 subplot(2,1,1);
 h = text(0.2,2.6,'(a) acoustic pressure');
 set(h,'FontSize',24);
 set(h,'FontWeight','bold');
-legend('2 m','1 m','0.6 m','0.4 m','0.2 m')
 ylim([0 3])

@@ -1,26 +1,26 @@
-%% MAKE FIG 12 Lumped Parameter %%
+%% MAKE FIG 7 LUMPED PARAMETER %%
 %
-% Make figure for Euler air gun "Geophysics" paper
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
 %
-% Compare Euler airgun model with the lumped parameter model
+% Compare 1D air gun model with lumped parameter model
 
-clear all;
-clc;
-%close all;
-
-addpath ../SBPSAT
-addpath ../SeismicAirgunCode
-
+clear all; clc;
 set(0,'DefaultLineLineWidth',3);
 set(0,'DefaultAxesFontSize',24);
-cmap_orginal = get(gca,'ColorOrder');
-cmap = cmap_orginal; %[cmap_orginal(5,:); cmap_orginal(2,:)];
+
+% add code directories
+addpath ../SBPSAT
+addpath ../SeismicAirgunCode
+addpath ../SBPSAT/VariableInitialBubbleVolume/
+
+cmap = get(gca,'ColorOrder');
 
 figHand1 = figure(1); clf;
 set(figHand1,'Position',[100 100 600 1200]);
 alpha = 0.8; % plotting transparency
 
-%%% Parameters %%%
+%% Parameters %%
 
 r = 75; % distance from source to receiver [m]
 c_inf = 1482; % speed of sound in water [m/s]
@@ -52,7 +52,6 @@ for i = 1:length(airgunLengths)
     aL = airgunLengths(i) % display air gun length
     
     %%% Lumped Parameter Model %%%
-    
     aV = aL*m_in * aA; % air gun volume [in^3]
     input = [aP, aV, aA]; % inputs for lumped parameter model [pressure, volume, port area]
     physConst = physical_constants(aD,r); % save physical constants. Specific depth and distance from source to receiver
@@ -92,9 +91,7 @@ for i = 1:length(airgunLengths)
     
     
     
-    
-     
-    %%% Euler Air Gun Model %%%
+    %%% 1D Air Gun Model %%%
     
     sol = runEulerCode_initBubbleVol(nx, aV, aP, aL, aA, aD);
     
@@ -134,7 +131,6 @@ for i = 1:length(airgunLengths)
     subplot(4,1,1);
     idx = length(x)-1; % spatial position to plot
     plot(t*1000,p(idx,:)*pa_psi,'Color',cmap(i,:),'LineStyle','-');
-    
     
     % bubble mass
     subplot(4,1,2);
@@ -182,5 +178,5 @@ h = text(10,7,'(d) pressure perturbation');
 set(h,'FontSize',24);
 set(h,'FontWeight','bold');
 xlabel('Time (ms)');
-legend('L = 2 m','L = 0.5 m');
+
  

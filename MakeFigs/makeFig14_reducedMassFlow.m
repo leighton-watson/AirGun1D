@@ -1,23 +1,32 @@
-%% DATA SIM COMPARE %%
+%% MAKE FIG 14 REDUCED MASS FLOW %%
 %
-% Turbulent corrections
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
+%
+% Compare data and simulation results for model with reduced mass flow
+% correction
+%
+% For information about the data see Ronen and Chelminski (2018) A next 
+% generation seismic source with low frequency signal and low 
+% environmental impact, 80th EAGE Conference & Exhibition. 
+% doi:10.3997/2214-4609.201800745
 
-clear all;
-clc;
-
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/598ci/FarField'
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/50ci/FarField'
-
+clear all; clc;
 set(0,'DefaultLineLineWidth',3);
 set(0,'DefaultAxesFontSize',24);
 cmap = get(gca,'ColorOrder');
 
-figHand1 = figure(10); clf;
+% add directories
+addpath ../Data
+addpath ../SeismicAirgunCode/
+addpath ../SBPSAT/
+addpath ../SBPSAT/ReducedMassFlow/
+
+figHand1 = figure(1); clf;
 set(figHand1,'Position',[100 100 600 700]);
 
 %% Data %%
 
-%dataStr = {'188_0750cm_1030psi_598ci_DHA.csv'};
 dataStr = {'219_1000cm_1030psi_598ci_DHA.csv'};
 
 tshift = 90.27;
@@ -31,7 +40,7 @@ tdata = 0:dt:(k-1)*dt;
 
 r = 75; % distance from source to receiver [m]
 
-figure(10);
+figure(1);
 subplot(3,1,[1 2]);
 plot(tdata*1000-tshift,pData*1e-5*r,'k');
 hold on;
@@ -40,12 +49,7 @@ ylabel('bar m');
 
 dmax = max(pData*1e-5*r);
 
-%% Simulation %%
-
-addpath ../SBPSAT
-addpath ../SeismicAirgunCode
-
-%% Run Euler Air Gun Simulation %%
+%% Run 1D Air Gun Simulation %%
 
 nx = 50; % number of grid points per 1 m of air gun length
 
@@ -92,7 +96,7 @@ for i = 1:length(Mfac)
     tSave = [tSave, tInterp'];
     pSave = [pSave, pPres'];
     
-    figure(10);
+    figure(1);
     subplot(3,1,[1 2]);
     plot((tInterp-r/c_inf)*1000+2,pPres*1e-5*r,'Color',cmap(i,:)); 
     hold on;
@@ -109,7 +113,7 @@ for i = 1:length(Mfac)
     
 end
 
-figure(10)
+figure(1)
 subplot(3,1,3);
 ylabel('kg');
 %ylim([-15 35]);

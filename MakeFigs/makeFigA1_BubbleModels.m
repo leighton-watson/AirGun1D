@@ -1,14 +1,22 @@
-%% COMPARE BUBBLE MODELS %%
+%% MAKE FIG A1 BUBBLE MODELS %%
 %
-% Compare between the Herring, Modified Herring, and Gilmore equation.
-% Should I include the Rayleigh equation???
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
 %
-% Generate the figure for the appendix of the seismic airgun paper.
+% Compare between different bubble models.
 
-clear all; clc; 
+clear all; clc;
 set(0,'DefaultLineLineWidth',3);
-set(0,'DefaultAxesFontSize',22);
+set(0,'DefaultAxesFontSize',24);
 cmap = get(gca,'ColorOrder');
+
+% add directories
+addpath ../BubbleCode/
+
+figHand1 = figure(1); clf;
+set(figHand1,'Position',[100 100 600 300]);
+msize = 8;
+
 
 %% INITIAL PARAMETERS %%
 
@@ -30,7 +38,6 @@ Q = 287.06; % gas constant
 init_mass = init_pressure*init_volume/(T_inf*Q); % mass in bubble
 
 init_cond = [init_radius, init_vel, T_inf, init_pressure]; %initial conditions for solver
-
 
 %%%PARAMETERS%%%
 rho_infty = 1000; %ambient density [kg/m^3]
@@ -67,8 +74,6 @@ ylim([0 1]);
 h = text(10,0.9,'(a) Bubble radius');
 set(h,'FontSize',24);
 set(h,'FontWeight','bold');
-
-
 
 %%%HERRING%%%
 [th,Yh] = ode45(@Herring, time, init_cond, options, params);
@@ -111,31 +116,4 @@ ylabel('%')
 h = text(10,1.55,'(b) Difference');
 set(h,'FontSize',24);
 set(h,'FontWeight','bold');
-
-% 
-% figHand2 = figure(2); clf;
-% set(figHand2,'Position',[200 250 600 450]);
-% 
-% subplot(2,1,1);
-% h2 = plot(tmh, Ymh(:,1),'Color',cmap(2,:));
-% title('Modified Herring');
-% ylabel('R (m)');
-% grid on;
-% xlim([time_plot(1) time_plot(end)]);
-% 
-% % interpolate on to a common time vector
-% Yh_int = pchip(th,Yh(:,1),tmh);
-% Yg_int = pchip(tg,Yg(:,1),tmh);
-% 
-% % difference between Herring and Modified Herring equation
-% diff_h = (Yh_int-Ymh(:,1)); %./(Ymh(:,1)).*100;
-% 
-% % difference between Gilmore and Modified Herring equation
-% diff_g = (Yg_int-Ymh(:,1)); %./(Ymh(:,1)).*100;
-% 
-% subplot(2,1,2);
-% plot(tmh, diff_h,'Color',cmap(1,:));
-% hold on;
-% plot(tmh, diff_g,'Color',cmap(3,:));
-% xlim([time_plot(1) time_plot(end)])
 

@@ -1,19 +1,30 @@
-%% DATA SIM COMPARE %%
+%% MAKE FIG 17A ALL CORRECTIONS 10 M %%
 %
-% Turbulent corrections
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
+%
+% Compare data and 1D air gun simulations with all corrections added.
+%
+% Air gun is located at 10 m depth.
+%
+% For information about the data see Ronen and Chelminski (2018) A next 
+% generation seismic source with low frequency signal and low 
+% environmental impact, 80th EAGE Conference & Exhibition. 
+% doi:10.3997/2214-4609.201800745
 
-clear all;
-clc;
-
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/598ci/FarField'
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/50ci/FarField'
-
+clear all; clc;
 set(0,'DefaultLineLineWidth',3);
 set(0,'DefaultAxesFontSize',24);
+
+% add data directory
+addpath ../Data/
+addpath ../SBPSAT/
+addpath ../SBPSAT/OptimizedModel/
+
 cmap = get(gca,'ColorOrder');
 
 figHand1 = figure(1); clf;
-set(figHand1,'Position',[100 100 600 350]);
+set(figHand1,'Position',[100 100 600 400]);
 
 %% Data %%
 
@@ -32,7 +43,6 @@ for i = 1:length(dataStr)
     tdata = 0:dt:(k-1)*dt;
     
     figure(1);
-    subplot(3,1,[1 2]);
     plot(tdata*1000-tshift,pData*1e-5*r,'k');
     hold on;
     xlim([0 300])
@@ -42,14 +52,7 @@ for i = 1:length(dataStr)
 end
 
 
-
-
-%% Simulation %%
-
-addpath ../SBPSAT
-addpath ../SeismicAirgunCode
-
-%% Run Euler Air Gun Simulation %%
+%% 1D Air Gun Simulation %%
 
 nx = 50; % number of grid points per 1 m of air gun length
 
@@ -75,13 +78,6 @@ dissp_boolean = logical([1 0]); % constant or time varying dissipation
 Mfac = [1 0.45]; % mass flow reduction factor
 Vinit = [600 3000]; % initial bubble volume
 
-
-% nparam = 4; % number of simulations with different parameters
-% beta = [0 0.8 0.8 0.8]; % damping parameter
-% dissp_boolean = logical([1 0 0 0]); % constant or time varying dissipation
-% Mfac = [1 0.6 0.6 0.3]; % mass flow reduction factor
-% Vinit = [600 600 2000 5000]; % initial bubble volume
-
 tSave = [];
 pSave = [];
 
@@ -106,28 +102,16 @@ for i = 1:nparam % beta and C need to be the same length
     pPres = pDirInterp - pGhostInterp; % direct and ghost
     
     figure(1);
-    subplot(3,1,[1 2]);
     plot((tInterp-r/c_inf)*1000+2,pPres*1e-5*r,'Color',cmap(i,:)); 
     hold on;
     
     pmax(i) = max(pPres*1e-5*r);
-        
-    subplot(3,1,3);
-    plot(t*1000, U); hold on;
     
     tSave = [tSave, tInterp'];
     pSave = [pSave, pPres'];
     
 end
 
-figure(1)
-subplot(3,1,3);
-xlim([0 300]);
-ylabel('m/s');
-ylim([-15 35]);
-xlabel('Time (ms)');
-
-subplot(3,1,[1 2]);
 xlim([0 300]);
 ylim([-1.5 4])
 ylabel('bar m');
@@ -146,6 +130,4 @@ for j = 1:nparam
     plot((tSave(:,j)-r/c_inf)*1000+2,pSave(:,j)*1e-5*r,'Color',cmap(j,:)); 
     hold on;
 end
-
-
 

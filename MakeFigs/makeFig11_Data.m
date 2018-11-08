@@ -1,10 +1,22 @@
-%% DATA %%
+%% MAKE FIG 11 DATA %%
+%
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
+%
+% Display data and metrics of source signature from the data (peak
+% pressure, rise time, slope). Data is from Lake Seneca. 
+%
+% For information about the data see Ronen and Chelminski (2018) A next 
+% generation seismic source with low frequency signal and low 
+% environmental impact, 80th EAGE Conference & Exhibition. 
+% doi:10.3997/2214-4609.201800745
 
-clear all;
-
+clear all; clc;
 set(0,'DefaultLineLineWidth',3);
 set(0,'DefaultAxesFontSize',24);
-cmap = get(gca,'ColorOrder');
+
+% add data directory
+addpath ../Data/
 
 figHand1 = figure(1); clf;
 set(figHand1,'Position',[100 100 600 1200]);
@@ -13,8 +25,6 @@ cmap = get(gca,'ColorOrder');
 msize = 8;
 
 %% TIME SERIES %%%
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/598ci/FarField'
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/50ci/FarField'
 
 subplot(4,1,1);
 hold on;
@@ -59,8 +69,6 @@ box on
 subplot(4,1,2);
 hold on;
 
-addpath '/Users/lwat054/Documents/Stanford_University/Papers/Submitted/Low Frequency Pneumatic Seismic Sources/Figs/RiseTime_Period/RiseTime'
-
 % 25 m depth
 data = load('rtim_2500cm_50ci_P-rtim.txt');
 plot(data(:,1), data(:,2),'^','Color',cmap(5,:),'MarkerSize',msize,...
@@ -71,10 +79,6 @@ plot(data(:,1), data(:,2),'o','Color',cmap(5,:),'MarkerSize',msize,...
     'MarkerEdgeColor',cmap(5,:),'MarkerFaceColor',cmap(5,:));
 
 % 15 m depth
-% data = load('rtim_1500cm_50ci_P-rtim.txt');
-% plot(data(:,1), data(:,2),'^','Color',cmap(4,:),'MarkerSize',msize,...
-%     'MarkerEdgeColor',cmap(4,:),'MarkerFaceColor',cmap(4,:));
-
 data = load('rtim_1500cm_598ci_P-rtim.txt');
 plot(data(:,1), data(:,2),'o','Color',cmap(4,:),'MarkerSize',msize,...
     'MarkerEdgeColor',cmap(4,:),'MarkerFaceColor',cmap(4,:));
@@ -107,14 +111,12 @@ plot(data(:,1), data(:,2),'o','Color',cmap(1,:),'MarkerSize',msize,...
     'MarkerEdgeColor',cmap(1,:),'MarkerFaceColor',cmap(1,:));
 
 
-
 % label
 xlabel('Pressure (psi)');
 ylabel('Rise Time (ms)');
 box on;
 xlim([200 1200]);
 ylim([1 5.5])
-
 
 
 %% PEAK AMPLITUDE %%
@@ -184,8 +186,6 @@ ylim([0 1]);
 
 subplot(4,1,4);
 hold on;
-
-addpath '/Users/lwat054/Documents/Stanford_University/Papers/Submitted/Low Frequency Pneumatic Seismic Sources/Figs/Pressure/PressureSlopeData'
 
 % 25 m depth
 data = load('rtim2_2500cm_50ci_Pressure-Slope.txt');

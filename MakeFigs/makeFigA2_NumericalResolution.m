@@ -1,19 +1,24 @@
-%% Numerical Resolution %%
+%% MAKE FIG A2 NUMERICAL RESOLUTION %%
 %
-% Testing sensitivity of initial transient to grid spacing/numerical
-% resolution
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
+%
+% Run simulations for different grid resolution to demonstrate numerical
+% resolution of 1D air gun simulations.
 
-clear all;
-clc;
+clear all; clc;
+set(0,'DefaultLineLineWidth',3);
+set(0,'DefaultAxesFontSize',24);
+cmap = get(gca,'ColorOrder');
 
+% add directories
 addpath ../SBPSAT
 addpath ../SeismicAirgunCode
 
-set(0,'DefaultLineLineWidth',3);
-set(0,'DefaultAxesFontSize',24);
-
 figHand1 = figure(1); clf;
 set(figHand1,'Position',[100 100 600 700]);
+
+%% 1D Air Gun Code %%
 
 gamma = 1.4; % ratio of heat capacities
 cv = 718; % heat capacity of air at constant volume [J/kgK]
@@ -88,7 +93,7 @@ for j = 1:length(nx)
        
 end
 
-%% 
+%% Plotting %%
 
 figure(1);
 subplot(2,1,1);

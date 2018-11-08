@@ -1,28 +1,23 @@
-%% MAKE FIG 7 Pressure Simulation %%
+%% MAKE FIG 8 PRESSURE %%
 %
 % Make figure for Euler air gun "Geophysics" paper
 %
-% Plot mass flow rate and pressure perturbation for a range of air gun
-% pressures. Plot slope, rise time and peak pressure vs initial air gun
-% pressure
+% Display 1D air gun simulation results for a range of air gun pressures. 
+% Display mass flow rate, acoustic pressure and plot source signature 
+% metrics (rise time, slope and peak pressure)
 
-clear all;
-clc;
-%close all;
+clear all; clc;
+set(0,'DefaultLineLineWidth',3);
+set(0,'DefaultAxesFontSize',24);
 
+% add code directories
 addpath ../SBPSAT
 addpath ../SeismicAirgunCode
 
-set(0,'DefaultLineLineWidth',3);
-set(0,'DefaultAxesFontSize',24);
 cmap = get(gca,'ColorOrder');
 
 figHand1 = figure(1); clf;
-set(figHand1,'Position',[100 100 600 260]);
-
-figure(1); clf;
-figHand2 = figure(2); clf;
-set(figHand2,'Position',[100 100 600 900]);
+set(figHand1,'Position',[100 100 600 900]);
 
 
 %% Run Euler Air Gun Simulation %%
@@ -43,22 +38,15 @@ gamma = 1.4; % ratio of heat capacities
 Q = 287.06; % specific gas constant for dry air [J/kgK]
 T_inf = 288; % temperature assumed constant throughout the system [K]
 
-%aP = [100 220 420 610 810 1030 1200 1400 1600 1800 2000]; % air gun pressure for slope/rise time plot
-%aP = [1000 2000]%
 aP_plot = [220 420 610 810 1030]; % air gun pressures to plot [psi]
-%aP_plot = aP;
-%aP_plot = [220 420 610 810 1030];
-%aP_plot = [220 1030];
-%aP_plot = [2000 1000]
 aP_plot = fliplr(aP_plot);
 aP = aP_plot;
 
-%aL = 0.6; % air gun length [m]
-%aA = 16; % air gun port area [in^2] % cross-sectional area = port area
-aL = 1.2;
-aA = 12.5;
+% air gun properties
+aL = 1.2; % length [m]
+aA = 12.5; % cross-sectional area [in^2]
 aD = 7.5; % air gun depth [m]
-aV = aL*39.3701*aA;
+aV = aL*39.3701*aA; % volume [m^3]
 
 physConst = physical_constants(aD,r);
 k = [5 4 3 2 1];
@@ -82,17 +70,13 @@ for i = 1:length(aP)
     if ismember(aP(i), aP_plot)
         
         % bubble mass
-        figure(2);
+        figure(1);
         subplot(3,1,1);
         h = plot(t*1000, m,'Color',cmap(j,:));
-        %h.Color(4) = 0.6;
         hold on;
         xlim([tmin tmax]);
         ylabel('kg');
-        %ylim([0 0.6]);
-        %xlabel('Time (ms)');
-        
-        
+                
         % plot analytical mass flow rate
         dmdt = (aP(i)*psi_pa)*(aA*in2_m2) * (gamma/(Q*T_inf))^(1/2) * ...
             (2/(gamma+1))^((gamma+1)/(gamma-1));
@@ -132,24 +116,7 @@ for i = 1:length(aP)
        
         [tDir2, pDir2] = pressure_eqn(t2, R2, U2, A2, physConst.rho_infty, physConst.c_infty, physConst.r); %direct arrival
         plot((tDir2-r/c_inf)*1000-0.7933, pDir2*1e-5*r,'Color',cmap(j,:),'LineStyle','--');
-        
-        %%% longer time series including ghost
-        figure(1);
-        [tGhost, pGhost] = pressure_eqn(t', R', U', A', rho_inf, c_inf, ... %ghost
-        r + 2*aD);
-    dt = 1e-5;
-    tInterp = min(tDir):dt:max(tDir);
-    pDirInterp = pchip(tDir, pDir, tInterp);
-    pGhostInterp = pchip(tGhost, pGhost, tInterp);
-    pPres = pDirInterp - pGhostInterp;
-        
-        plot((tInterp-r/c_inf)*1000,pPres*1e-5*r,'Color',cmap(k(j),:));
-        hold on;
-        xlim([tmin 300]);
-        ylim([-1.5 3])
-        ylabel('bar m');
-        xlabel('Time (ms)');
-        
+          
         j = j+1;
     end
     
@@ -160,8 +127,9 @@ for i = 1:length(aP)
  
 end
 
-%% 
-figure(2);
+%% Format figures %%
+
+figure(1);
 subplot(3,1,3);
 plot(aP, riseTime,'k-');
 hold on;
@@ -177,13 +145,12 @@ set(h,'FontWeight','bold');
 
 subplot(3,1,1);
 ylim([0 0.8]);
-h = text(0.2,0.52,'(a) bubble mass');
+h = text(0.2,0.7,'(a) bubble mass');
 set(h,'FontSize',24);
 set(h,'FontWeight','bold');
     
 subplot(3,1,2);
 ylim([0 3])
-h = text(0.2,3.5,'(b) acoustic pressure');
+h = text(0.2,2.7,'(b) acoustic pressure');
 set(h,'FontSize',24);
 set(h,'FontWeight','bold');
-%legend('220 psi','420 psi','610 psi','810 psi','1030 psi')

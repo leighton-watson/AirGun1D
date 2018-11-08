@@ -1,19 +1,26 @@
-%% MAKE FIG %%
+%% MAKE FIG 15 INIT COND %%
+%
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
+%
+% Compare data and simulation results for model with variable initial
+% conditions (variable initial bubble volume)
+%
+% For information about the data see Ronen and Chelminski (2018) A next 
+% generation seismic source with low frequency signal and low 
+% environmental impact, 80th EAGE Conference & Exhibition. 
+% doi:10.3997/2214-4609.201800745
 
-clear all;
-clc;
-
-
+clear all; clc;
 set(0,'DefaultLineLineWidth',3);
 set(0,'DefaultAxesFontSize',24);
 cmap = get(gca,'ColorOrder');
 
-addpath ../SBPSAT
-addpath ../SeismicAirgunCode
-
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/598ci/FarField'
-addpath '/Users/lwat054/Documents/Stanford_University/Research/SeismicAirguns/Data/Lake/CSVFormat/50ci/FarField'
-
+% add directories
+addpath ../Data
+addpath ../SeismicAirgunCode/
+addpath ../SBPSAT/
+addpath ../SBPSAT/VariableInitialBubbleVolume/
 
 %% Run Code %%
 
@@ -29,7 +36,6 @@ r = 75;
 rho_infty = 1e3;
 c_infty = 1482; 
  
-%initBubbleVol = [200 300 600 900 1200 1500 2000 2500 3000 3500 4000];
 initBubbleVol_plot = [600 1200 2500 4000];
 initBubbleVol = initBubbleVol_plot;
 
@@ -40,12 +46,10 @@ riseTime = zeros(size(initBubbleVol));
 figHand1 = figure(1); clf;
 set(figHand1,'Position',[100 100 600 700]);
 
-%% DATA %%
 
 %% Data %%
 
 dataStr = {'219_1000cm_1030psi_598ci_DHA.csv'};
-%dataStr = {'188_0750cm_1030psi_598ci_DHA.csv'};
 
 tshift = 90.27;
 data = csvread(dataStr{1});
@@ -67,7 +71,7 @@ ylabel('bar m');
 
 dmax = max(pData*1e-5*r);
  
-%% Euler Air Gun Model %%
+%% 1D Air Gun Model %%
 
 c_inf = 1482; % speed of sound in water [m/s]
 rho_inf = 1000; % density in water [kg/m^3]
@@ -121,7 +125,7 @@ for i = 1:length(initBubbleVol)
     
 end
 
-%%
+%% Metrics %%
 
 % rise time, slope and peak pressure
 subplot(3,1,3);

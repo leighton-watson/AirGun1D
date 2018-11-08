@@ -1,21 +1,19 @@
-%% MAKE FIG 4 Model Validation %%
+%% MAKE FIG 5 MODEL VALIDATION %%
 %
-% Make figure for Euler air gun "Geophysics" paper
+% Watson, Werpers and Dunham (2018) What controls the initial peak of an
+% air gun source signature, Geophysics
 %
-% Simulate air gun dynamics. Plot time snapshots of the internal dynamics.
-% Compare numerical and analytical solution
+% Compare 1D air gun simulation results with analytical expressions for
+% density, pressure, velocity and speed of sound in the air gun chamber
 
-clear all;
-clc;
-%close all;
+clear all; clc;
+set(0,'DefaultLineLineWidth',3);
+set(0,'DefaultAxesFontSize',24);
 
+% add code directories
 addpath ../SBPSAT
 addpath ../SeismicAirgunCode
 
-set(0,'DefaultLineLineWidth',3);
-set(0,'DefaultAxesFontSize',24);
-colormap(makecmap('black',40,10,10));
-%colormap([makecmap('orangered',50,20,20);flipud(makecmap('tomato',50,20,20))]);
 cmap = get(gca,'ColorOrder');
 
 %% Run Euler Air Gun Simulation %%
@@ -89,10 +87,6 @@ for i = 1:length(tplot)
             p_analytical(j) = p0;
             rho_analytical(j) = rho0;
         else % properties inside expansion fan
-            % v_analytical(j) = (2/(gamma+1)).*((x(j)-aL)./t(idx)+((gamma-1)/2)*v0+c0);
-            % c_analytical(j) = v_analytical(j)-((x(j)-aL))/t(idx);
-            
-            %v_analytical(j) = (2/(gamma+1)).*((aL-x(j))./t(idx)+((gamma-1)/2)*v0+c0);
             v_analytical(j) = (2/(gamma+1)).*(c0-(aL-x(j))/t(idx));
             c_analytical(j) = v_analytical(j)+((aL-x(j)))/t(idx);
             
@@ -114,8 +108,6 @@ for i = 1:length(tplot)
     h = text(0.01, 200,'(a) density');
     set(h,'FontSize',24);
     set(h,'FontWeight','bold');
-    
-    % h = vline(1.2-t(idx)*c0);
     h.Color = cmap(i,:);
     
     
@@ -180,8 +172,3 @@ for i = 1:length(tplot)
     h = plot(x,c(:,idx),'x','Color',cmap(i,:));
        
 end
-% 
-% subplot(4,1,4);
-% legend('t = 1 ms','t = 2 ms','t = 3 ms','t = 4 ms','Location','SouthWest')
-% 
-% print -depsc 'Fig4_ModelValidation';
