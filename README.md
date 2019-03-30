@@ -2,7 +2,7 @@
 
 This repository contains MATLAB code for simulating a 1D air gun coupled to an oscillating bubble. The model calculates fields inside the air gun chamber and the acoustic pressure in the water.
 
-This code was used in the paper of Watson, Werpers and Dunham (2018) What controls the initial peak of an air gun source signature? *Geophysics*, 84(2), P27-P45. doi: [10.1190/geo2018-0298.1](https://doi.org/10.1190/geo2018-0298.1) and this repository contains the code necessary to reproduce the figures in this paper.
+This code was used in the paper of Watson, Werpers and Dunham (2019) What controls the initial peak of an air gun source signature? *Geophysics*, 84(2), P27-P45. doi: [10.1190/geo2018-0298.1](https://doi.org/10.1190/geo2018-0298.1) and this repository contains the code necessary to reproduce the figures in this paper.
 
 ### How do I get set up? ###
 * Clone this repository to your local directory.
