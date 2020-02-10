@@ -1,0 +1,23 @@
+# Don't track files of these types
+
+# Files associated with latex
+*.aux
+*.log
+*.out
+*.bbl
+*.blg
+*.gz
+*.cls
+
+# Files associated with figures
+*.eps
+*.ai
+*.png
+*.jpg
+*.jpeg
+Fig*pdf
+*converted-to.pdf
+
+# Output files
+*.bin
+*psi*
