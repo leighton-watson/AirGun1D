@@ -32,12 +32,11 @@ toc
 t = sol.x; % time vector
 R = sol.y(1,:); % bubble radius
 
-figure(1); clf;
+figure(1); subplot(3,1,1);
 plot(t, R);
 xlabel('Time (s)');
-ylabel('m');
-title('Bubble Radius');
-
+ylabel('m'); xlim([0 2]);
+title('(a) Bubble Radius');
 
 % acoustic pressure 
 r = 75; % distance from source to receiver [m]
@@ -50,11 +49,11 @@ A = solDY(2,:); % bubble wall acceleration (m/s^2)
 [tDir, pDir] = pressure_eqn(t', R', U', A', rho_inf, c_inf, r); % direct pressure perturbation (Pa)
 pDirBarM = pDir*1e-5*r; % convert pressure to bar m
 
-figure(2); clf;
+figure(1); subplot(3,1,2);
 plot(tDir, pDirBarM);
 xlabel('Time (s)');
-ylabel('bar m');
-title('Acoustic Pressure');
+ylabel('bar m'); xlim([0 2]);
+title('(b) Acoustic Pressure');
 
 % pressure inside source
 t = sol.x; % time
@@ -77,7 +76,7 @@ v = rhov./rho; % velocity [m/s]
 p = (gamma-1)*(e-0.5*rho.*v.^2); % pressure
 
 
-figure(3); clf;
+figure(1); subplot(3,1,3);
 pa2psi = 0.000145038; % conversion from pa to psi
 h = surf(X,T*1000,p*pa2psi);
 view(2); shading interp
@@ -86,4 +85,4 @@ cb = colorbar; cb.Label.String = 'psi';
 ylim([0 20]); xlim([0 src_length]);
 set(h.Parent,'XTick',[0 0.2 0.4 0.6 0.8 1 1.2]);
 hold on;
-title('Source Pressure');
+title('(c) Source Pressure');

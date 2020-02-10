@@ -290,12 +290,12 @@ sol = runEulerCode(nx, src_pressure, src_length, src_area, src_depth);
 
 The time vector is saved in \texttt{sol.x} and has length $N$, where $N$ is the number of time steps. The bubble and airgun variables are saved in \texttt{sol.y}. The bubble variables that are solved for are the bubble radius, $R$, wall velocity, $U = \dot{R} = dR/dt$, mass, $m_b$, and internal energy, $E_b$. The airgun variables are the density, $\rho$, the density multiplied by the velocity, $\rho v$, and the internal energy, $e$. \texttt{sol.y} has dimensions of $(3[M \times L)+1] + 4)~\times~N$ where $M$ is the number of grid points per 1 m of source length and L is the source length, so $M\times L+1$ is the total number of spatial grid points. The format of \texttt{sol.y} is shown in Figure~\ref{fig:sol y}.
 
-
-
-
-
-
-
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{Fig_exampleOutputs}
+\caption{Example outputs showing (a) bubble radius, (b) acoustic pressure from direct arrival, and (c) space-time plot of pressure inside the source. Source is 1.2 m long with a cross-sectional area of 12.5~in$^2$ at a depth of 7.5~m and pressure of 1000~psi.}
+\label{fig:example outputs}
+\end{figure}
 
 
 
