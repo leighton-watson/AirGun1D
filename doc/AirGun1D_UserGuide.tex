@@ -129,6 +129,9 @@ This code extends {\bf SeismicAirgun} (\href{https://github.com/leighton-watson/
 \section{Directory}
 \begin{itemize}
 \item{\bf SBPSAT} - source code for AirGun1D. Governing equations are solved using the summation-by-parts technique with simultaneous approximation term (SBP-SAT).
+\begin{itemize}
+\item also contains several folders that have modified versions of the source code that are used in generating the figures of \citet{Watson2019_airgun}
+\end{itemize}
 \item {\bf SeismicAirgunCode} - source code for lumped parameter model description of airgun.
 \item {\bf doc} - documentation including user guide and license file.
 \item {\bf MakeFigs} - script files that generate all of the figures of \citet{Watson2019_airgun}.
@@ -139,7 +142,7 @@ This code extends {\bf SeismicAirgun} (\href{https://github.com/leighton-watson/
 \section{SBPLib}
 AirGun1D is a finite-difference code that uses summation-by-parts (SBP) operators \cite{Svard2014} and relies on SBPLib, which is a library of primitives and help functions for working with summation-by-parts finite differences in Matlab developed by Ken Mattsson's group at Uppsala University (including Jonatan Werpers, Martin Almquist, Ylva Rydin and Vidar Stiernstr\"{o}m). SBPLib is hosted through \href{https:bitbucket.org}{bitbucket} and is available at \href{https://bitbucket.org/sbpteam/sbplib/src/default/}{https://bitbucket.org/sbpteam/sbplib/src/default/}. Clone or download SBPLib and add it to your Matlab path:
 \begin{lstlisting}[language=Matlab]
-addpath ../SBPLib/ % add path to SBPLib
+addpath ../sbplib/ % add path to SBPLib
 \end{lstlisting}
 
 \section{Model Description}
@@ -178,6 +181,10 @@ v_a(x,0) & = 0.
 
 Boundary conditions are also required for the 1D airgun model. At the back wall, $x=0$, a solid wall boundary condition, $v(0)=0$, is imposed. At the air gun port, $x=L$, the boundary condition depends upon the flow state. If flow out of the port is subsonic, $v(L)<c(L)$, continuity of pressure is required and the pressure in the air gun at the port, $p(L)$, is set equal to the pressure in the bubble, $p_b$. If the port is choked, $v(L)=c(L)$, waves cannot propagate upstream from the bubble into the air gun and pressure continuity is not required. The bubble pressure will be different than the air gun pressure. The latter is generally the case in our simulations.
 
+The source stops discharging (the port closes) as a specified time. This value is set in \texttt{SBPSAT/configAirgun.m}:
+\begin{lstlisting}[language=Matlab]
+physConst.AirgunCutoffTime = 0.04; % time when air gun stops firing [s]
+\end{lstlisting}
 
 
 \subsection{Bubble}
@@ -186,7 +193,10 @@ The bubble is idealized as spherically symmetric with spatially uniform internal
 R \ddot{R}+ \frac{3}{2} \dot{R}^2 = \frac{p_b - p_\infty}{\rho_\infty} + \frac{R}{\rho_\infty c_\infty} \dot{p_b} - \alpha \dot{R},
 \label{eq:modified herring}
 \end{equation}
-where $R$ and $\dot{R}=dR/dt$ are the radius and velocity of the bubble wall, respectively, and $p_\infty, \rho_\infty$ and $c_\infty$ are the ambient pressure, density, and speed of sound, respectively, in the water infinitely far from the bubble. The ambient pressure is calculated by adding the hydrostatic pressure to the atmospheric pressure, $p_\infty~=~p_\text{atm}~+~\rho_\infty g D$, where $p_\text{atm}$ is the atmospheric pressure, $g$ is the acceleration from gravity and $D$ is the depth of the air gun below the water. Numerical models of air gun signatures typically under predict the damping observed in the data. This is likely due to the models neglecting various dissipation mechanisms such as turbulence and energy loss to phase changes. Mechanical energy dissipation mechanisms, which are challenging to model directly, are parameterized into an extra damping term of the form of $-\alpha \dot{R}$ where $\alpha$ is an empirically determined constant \citep{Langhammer1996, Watson2017}. This term dampens the bubble oscillations so that they are in agreement with the observations but has minimal impact on the initial bubble growth. 
+where $R$ and $\dot{R}=dR/dt$ are the radius and velocity of the bubble wall, respectively, and $p_\infty, \rho_\infty$ and $c_\infty$ are the ambient pressure, density, and speed of sound, respectively, in the water infinitely far from the bubble. The ambient pressure is calculated by adding the hydrostatic pressure to the atmospheric pressure, $p_\infty~=~p_\text{atm}~+~\rho_\infty g D$, where $p_\text{atm}$ is the atmospheric pressure, $g$ is the acceleration from gravity and $D$ is the depth of the air gun below the water. Numerical models of air gun signatures typically under predict the damping observed in the data. This is likely due to the models neglecting various dissipation mechanisms such as turbulence and energy loss to phase changes. Mechanical energy dissipation mechanisms, which are challenging to model directly, are parameterized into an extra damping term of the form of $-\alpha \dot{R}$ where $\alpha$ is an empirically determined constant \citep{Langhammer1996, Watson2017_airgun}. This term dampens the bubble oscillations so that they are in agreement with the observations but has minimal impact on the initial bubble growth. The parameter $\alpha$ is set in \texttt{SBPSAT/bubbleRHS.m}:
+\begin{lstlisting}[language=Matlab]
+alpha=0.8; % damping parameter 
+\end{lstlisting}
 
 The pressure in the bubble is calculated from the ideal gas equation of state,
 \begin{equation}
@@ -211,12 +221,14 @@ Mass flow into the bubble is determined by conservation of mass of the gas exiti
 \frac{dm_b}{dt} = v(L) \rho(L) A.
 \label{eq:mass flow}
 \end{equation}
-The cross-sectional area of the port is assumed to be the same as the cross-sectional area of the firing chamber (Figure~\ref{fig:schematic}).
+The cross-sectional area of the port, $A$, is assumed to be the same as the cross-sectional area of the firing chamber (Figure~\ref{fig:schematic}).
+
+Note that unlike in {\bf SeismicAirgun}, the bubble does not ascend buoyantly in {\bf AirGun1D}. This is equivalent to setting $\beta=0$ where $\beta$ is the tuning parameter that controls the rate of ascent in {\bf SeismicAirgun}.
 
 \subsection{Acoustic Radiation}
 The pressure perturbation in the water is related to the bubble dynamics by \citep{Keller1956}
 \begin{equation}
-\Delta p(r,t) = \rho_\infty \bigg[ \frac{\ddot{V}(t-r/c_\infty)}{4\pi r} - \frac{\dot{V}(t-r/c_\infty)^2}{32\pi^2r^4} \bigg],
+\Delta p(r,t) = \frac{\rho_\infty}{4\pi r} {\ddot{V}(t-r/c_\infty)},
 \label{eq:acoustic radiation}
 \end{equation}
 where $\Delta p$ is the pressure perturbation in the water, $r$ is the distance from the center of the bubble to the receiver, and $V$ is the volume of the bubble. The second term on the right side is a near-field term that decays rapidly with distance. In addition to the direct arrival there is a ghost arrival, which is the initially upgoing wave that is reflected with negative polarity from the sea surface. For a receiver directly below the source the observed pressure perturbation is

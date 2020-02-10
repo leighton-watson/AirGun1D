@@ -41,7 +41,7 @@ switch str
         physConst.Tinf = 288; % temperature assumed constant throughout the system [K]
         physConst.gamma = 1.4; % ratio of heat capacities for dry air
         
-        physConst.AirgunCutoffTime = 0.04; % time when air gun stops firing
+        physConst.AirgunCutoffTime = 0.04; % time when air gun stops firing [s]
         
                 
         % Air gun
