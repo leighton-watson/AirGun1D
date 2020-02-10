@@ -1,0 +1,242 @@
+\documentclass[10pt]{article}
+
+\usepackage{blindtext} % Package to generate dummy text throughout this template 
+
+\usepackage[sc]{mathpazo} % Use the Palatino font
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\linespread{1.05} % Line spacing - Palatino needs more space between lines
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+
+\usepackage[english]{babel} % Language hyphenation and typographical rules
+
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
+%\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage[small,labelfont=bf,up,textfont=it,up]{caption}
+\usepackage{sidecap}
+\usepackage{floatrow}
+
+\usepackage{booktabs} % Horizontal rules in tables
+
+\usepackage{enumitem} % Customized lists
+\setlist[itemize]{noitemsep} % Make itemize lists more compact
+
+\usepackage{abstract} % Allows abstract customization
+\renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic text
+
+\usepackage{titlesec} % Allows customization of titles
+\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
+\renewcommand\thesubsection{\roman{subsection}} % roman numerals for subsections
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
+
+\usepackage{fancyhdr} % Headers and footers
+\pagestyle{fancy} % All pages have headers and footers
+\fancyhead{} % Blank out the default header
+\fancyfoot{} % Blank out the default footer
+%\fancyhead[C]{CRes User Manual $\bullet$ 2019 $\bullet$ Watson} % Custom header text
+\fancyhead[C]{SeismicAirgun User Manual~~~$\bullet$~~~Watson~~~$\bullet$~~~2020} % Custom header text
+\fancyfoot[RO,LE]{\thepage} % Custom footer text
+
+\usepackage{titling} % Customizing the title section
+
+\usepackage{hyperref} % For hyperlinks in the PDF
+
+% math packages
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+
+% figure packages
+\usepackage{graphicx}
+
+\usepackage{natbib} % bibliography
+
+\usepackage{listings} % for including code snippets
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+ 
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    %numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+ 
+\lstset{style=mystyle}
+
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\setlength{\droptitle}{-4\baselineskip} % Move the title up
+
+\pretitle{\begin{center}\Huge\bfseries} % Article title formatting
+\posttitle{\end{center}} % Article title closing formatting
+\title{AirGun1D User Guide} % Article title
+\author{%
+\textsc{Leighton M. Watson} \\% Your name
+\normalsize Stanford University \\ % Your institution
+\normalsize \href{mailto:leightonwatson@stanford.edu}{leightonwatson@stanford.edu} % Your email address
+%\and % Uncomment if 2 authors are required, duplicate these 4 lines if more
+%\textsc{Jane Smith}\thanks{Corresponding author} \\[1ex] % Second author's name
+%\normalsize University of Utah \\ % Second author's institution
+%\normalsize \href{mailto:jane@smith.com}{jane@smith.com} % Second author's email address
+}
+\date{\today} % Leave empty to omit a date
+\renewcommand{\maketitlehookd}{%
+}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+% Print the title
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\section{Introduction}
+{\bf AirGun1D} simulates a one-dimensional airgun coupled to an air bubble surrounded by water. The oscillations of the air bubble in the water generate acoustic waves that are used in marine seismic surveys. the air bubble is described with a lumped parameter model where the internal properties of the bubble are assumed to be spatially uniform. The airgun (or source) is described as one-dimensional such that properties can vary with space. {\bf AirGun1D} is written in \texttt{MATLAB} and runs efficiently on a standard desktop/laptop computer. For more details and examples of the application of {\bf AirGun1D} see:
+\begin{itemize}
+\item Watson, L. M., Werpers, J., and Dunham, E. M. (2019) What controls the initial peak of an air gun source signature? \emph{Geophysics}, 84 (2), P27-P45, \href{https://doi.org/10.1190/geo2018-0298.1}{https://doi.org/10.1190/geo2018-0298.1}.
+\end{itemize}
+
+{\bf AirGun1D} is freely available online at \href{https://github.com/leighton-watson/AirGun1D}{https://github.com/leighton-watson/AirGun1D} and is distributed under the MIT license (see \texttt{license.txt} for details). 
+
+This code extends {\bf SeismicAirgun} (\href{https://github.com/leighton-watson/SeismicAirgun}{https://github.com/leighton-watson/SeismicAirgun}), which describes the airgun (source) with a lumped parameter model. {\bf AirGun1D} is more suitable for large sources where the spatial variations of properties inside the source is important. 
+
+\section{Directory}
+\begin{itemize}
+\item{\bf SBPSAT} - source code for AirGun1D. Governing equations are solved using the summation-by-parts technique with simultaneous approximation term (SBP-SAT).
+\item {\bf SeismicAirgunCode} - source code for lumped parameter model description of airgun.
+\item {\bf doc} - documentation including user guide and license file.
+\item {\bf MakeFigs} - script files that generate all of the figures of \citet{Watson2019_airgun}.
+\item {\bf Data} - data files that are needed to when generating the figures of of \citet{Watson2019_airgun}.
+\item {\bf BubbleCode} - bubble models that are compared in the appendix of \citet{Watson2019_airgun}.
+\end{itemize}
+
+\section{SBPLib}
+AirGun1D is a finite-difference code that uses summation-by-parts (SBP) operators \cite{Svard2014} and relies on SBPLib, which is a library of primitives and help functions for working with summation-by-parts finite differences in Matlab developed by Ken Mattsson's group at Uppsala University (including Jonatan Werpers, Martin Almquist, Ylva Rydin and Vidar Stiernstr\"{o}m). SBPLib is hosted through \href{https:bitbucket.org}{bitbucket} and is available at \href{https://bitbucket.org/sbpteam/sbplib/src/default/}{https://bitbucket.org/sbpteam/sbplib/src/default/}. Clone or download SBPLib and add it to your Matlab path:
+\begin{lstlisting}[language=Matlab]
+addpath ../SBPLib/ % add path to SBPLib
+\end{lstlisting}
+
+\section{Model Description}
+Here, I describe the mathematical model of {\bf AirGun1D}. The model can be divided into three components; i.) airgun, ii.) bubble, and iii.) acoustic radiation. The models for components ii) and iii) are the same as for {\bf SeismicAirgun}. For more details see the {\bf SeismicAirgun} user guide and \citet{Chelminski2019}, \citet{Watson2016} and the references therein. Here, I provide a detailed discussion of the airgun model and a cursory description of the bubble and acoustic radiation models. For more details see \citet{Watson2019_airgun}.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\textwidth]{Fig_Schematic}
+\caption{Schematic diagram of AirGun1D model showing the three model components: i) airgun that is described by the Euler equation that allow for spatial variations of properties within the airgun, ii) bubble that is described with a lumped parameter model and the dynamics governing by the modified Herring equation, and iii) acoustic radiation that is modeled as a point source radiating in a half space.}
+\label{fig:schematic}
+\end{figure}
+
+\subsection{Airgun}
+The air gun firing chamber is idealized as a cylinder of length $L$ and cross-sectional area $A$. The air inside is compressible and inviscid. We only consider waves and flow along the length of the firing chamber, which are governed by the one-dimensional Euler equations:
+\begin{align}
+\frac{\partial \rho}{\partial t} + \frac{\partial (\rho v)}{\partial x} & = 0, \\
+\frac{\partial (\rho v)}{\partial t} + \frac{\partial (\rho v^2 + p)}{\partial x}
+& = 0, \\
+\frac{\partial e}{\partial t} + \frac{\partial [(e+p)v]}{\partial x} & = 0,
+\end{align}
+where $\rho$, $p$, and $v$ are the density, pressure, and axial velocity of the fluid inside the air gun, respectively, and $e$ is the internal energy per unit volume. The system is closed with the ideal gas equation of state, written here as
+\begin{equation}
+p = (\gamma-1)\bigg(e-\frac{1}{2} \rho v^2 \bigg),
+\end{equation}
+and the internal energy per unit volume is
+\begin{equation}
+e = c_v \rho T.
+\end{equation}
+
+The model is initialized with spatially uniform pressure, density and temperature through the airgun and zero initial velocity. The initial air gun pressure is set equal to the operating pressure, $p_0$, and the initial temperature is assumed to have equilibrated with the ambient temperature $T_{\infty}$ (since the air travels a long distance in a submerged umbilical hose from the compressor on the seismic vessel to the air gun). 
+\begin{align}
+p_a(x, 0) & = p_0, \\
+T_a(x, 0) & = T_{\infty}, \\
+v_a(x,0) & = 0.
+\end{align}
+
+Boundary conditions are also required for the 1D airgun model. At the back wall, $x=0$, a solid wall boundary condition, $v(0)=0$, is imposed. At the air gun port, $x=L$, the boundary condition depends upon the flow state. If flow out of the port is subsonic, $v(L)<c(L)$, continuity of pressure is required and the pressure in the air gun at the port, $p(L)$, is set equal to the pressure in the bubble, $p_b$. If the port is choked, $v(L)=c(L)$, waves cannot propagate upstream from the bubble into the air gun and pressure continuity is not required. The bubble pressure will be different than the air gun pressure. The latter is generally the case in our simulations.
+
+
+
+\subsection{Bubble}
+The bubble is idealized as spherically symmetric with spatially uniform internal properties. The bubble wall dynamics are governed by the modified Herring equation (\citealp{Herring1941,Cole1948,Vokurka1986}; Appendix A):
+\begin{equation}
+R \ddot{R}+ \frac{3}{2} \dot{R}^2 = \frac{p_b - p_\infty}{\rho_\infty} + \frac{R}{\rho_\infty c_\infty} \dot{p_b} - \alpha \dot{R},
+\label{eq:modified herring}
+\end{equation}
+where $R$ and $\dot{R}=dR/dt$ are the radius and velocity of the bubble wall, respectively, and $p_\infty, \rho_\infty$ and $c_\infty$ are the ambient pressure, density, and speed of sound, respectively, in the water infinitely far from the bubble. The ambient pressure is calculated by adding the hydrostatic pressure to the atmospheric pressure, $p_\infty~=~p_\text{atm}~+~\rho_\infty g D$, where $p_\text{atm}$ is the atmospheric pressure, $g$ is the acceleration from gravity and $D$ is the depth of the air gun below the water. Numerical models of air gun signatures typically under predict the damping observed in the data. This is likely due to the models neglecting various dissipation mechanisms such as turbulence and energy loss to phase changes. Mechanical energy dissipation mechanisms, which are challenging to model directly, are parameterized into an extra damping term of the form of $-\alpha \dot{R}$ where $\alpha$ is an empirically determined constant \citep{Langhammer1996, Watson2017}. This term dampens the bubble oscillations so that they are in agreement with the observations but has minimal impact on the initial bubble growth. 
+
+The pressure in the bubble is calculated from the ideal gas equation of state,
+\begin{equation}
+p_b = \frac{m_b Q T_b}{V_b},
+\label{eq:bubble eos}
+\end{equation}
+where $m_b$ is the mass inside the bubble, $T_b$ is the temperature inside the bubble in Kelvin, $V_b$ is the volume of the spherical bubble and the internal energy is
+\begin{equation}
+E_b = c_v m_b T_b.
+\label{eq:bubble int energy}
+\end{equation}
+
+The internal energy of the bubble changes due to the advection of mass and associated transport of enthalpy into the bubble, work done by volume changes, and heat loss to the water:
+\begin{equation}
+\frac{dE_b}{dt} = c_p T_a \frac{dm_b}{dt} - 4\pi M \kappa R^2 (T_b-T_\infty) - p_b \frac{dV_b}{dt},
+\label{eq:temp}
+\end{equation}
+where $T_\infty$ is the ambient temperature in the water, $\kappa$ is the heat transfer coefficient \citep{Ni2011, deGraaf2014} and $M$ is a dimensionless, empirically determined constant that accounts for the increased effective surface area over which heat transfer can occur as a result of turbulence in the bubble dynamics \citep{Laws1990}. Equation~\ref{eq:temp} is a statement of the first law of thermodynamics for an open system \citep{Tolhoek1952}.
+
+Mass flow into the bubble is determined by conservation of mass of the gas exiting the airgun:
+\begin{equation}
+\frac{dm_b}{dt} = v(L) \rho(L) A.
+\label{eq:mass flow}
+\end{equation}
+The cross-sectional area of the port is assumed to be the same as the cross-sectional area of the firing chamber (Figure~\ref{fig:schematic}).
+
+\subsection{Acoustic Radiation}
+The pressure perturbation in the water is related to the bubble dynamics by \citep{Keller1956}
+\begin{equation}
+\Delta p(r,t) = \rho_\infty \bigg[ \frac{\ddot{V}(t-r/c_\infty)}{4\pi r} - \frac{\dot{V}(t-r/c_\infty)^2}{32\pi^2r^4} \bigg],
+\label{eq:acoustic radiation}
+\end{equation}
+where $\Delta p$ is the pressure perturbation in the water, $r$ is the distance from the center of the bubble to the receiver, and $V$ is the volume of the bubble. The second term on the right side is a near-field term that decays rapidly with distance. In addition to the direct arrival there is a ghost arrival, which is the initially upgoing wave that is reflected with negative polarity from the sea surface. For a receiver directly below the source the observed pressure perturbation is
+\begin{equation}
+\Delta p_\text{obs}(r,t) = \Delta p_D(r,t) - \Delta p_G(r+2D,t),
+\end{equation}
+where $\Delta p_D$ is the direct signal and $\Delta p_G$ is the ghost arrival, which is assumed to have -1 reflection coefficient from the sea surface. $D$ is the depth of the seismic airgun.
+
+\section{Numerical Implementation}
+The Euler equations inside the air gun are solved using finite difference summation-by-parts operators for spatial derivatives \citep{Svard2014}. The air gun and bubble governing equations are evolved in time using an explicit adaptive Runge-Kutta (4,5) method. The air gun and bubble models are coupled at the interface using the simultaneous-approximation-term framework \citep{Carpenter1994,DelReyFernandez2014a,Svard2014}.
+The reader is referred to \citet{Watson2019_airgun} for more details.
+
+
+
+\newpage
+\bibliographystyle{elsarticle-harv}
+\bibliography{/Users/lwat054/Documents/Stanford_University/Research/References/Bibliography/library.bib}
+
+\end{document}
+
+
+
+
