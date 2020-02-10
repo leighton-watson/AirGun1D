@@ -35,7 +35,7 @@
 \fancyhead{} % Blank out the default header
 \fancyfoot{} % Blank out the default footer
 %\fancyhead[C]{CRes User Manual $\bullet$ 2019 $\bullet$ Watson} % Custom header text
-\fancyhead[C]{SeismicAirgun User Manual~~~$\bullet$~~~Watson~~~$\bullet$~~~2020} % Custom header text
+\fancyhead[C]{AirGun1D User Guide~~~$\bullet$~~~Watson~~~$\bullet$~~~2020} % Custom header text
 \fancyfoot[RO,LE]{\thepage} % Custom footer text
 
 \usepackage{titling} % Customizing the title section
@@ -128,11 +128,8 @@ This code extends {\bf SeismicAirgun} (\href{https://github.com/leighton-watson/
 
 \section{Directory}
 \begin{itemize}
-\item{\bf SBPSAT} - source code for AirGun1D. Governing equations are solved using the summation-by-parts technique with simultaneous approximation term (SBP-SAT).
-\begin{itemize}
-\item also contains several folders that have modified versions of the source code that are used in generating the figures of \citet{Watson2019_airgun}
-\end{itemize}
-\item {\bf SeismicAirgunCode} - source code for lumped parameter model description of airgun.
+\item{\bf SBPSAT} - source code for AirGun1D. Governing equations are solved using the summation-by-parts technique with simultaneous approximation term (SBP-SAT). This directory also contains several folders that have modified versions of the source code that are used in generating the figures of \citet{Watson2019_airgun}.
+\item {\bf SeismicAirgunCode} - source code for lumped parameter model description of airgun. This directory also contains functions that are required to calculate acoustic radiation. 
 \item {\bf doc} - documentation including user guide and license file.
 \item {\bf MakeFigs} - script files that generate all of the figures of \citet{Watson2019_airgun}.
 \item {\bf Data} - data files that are needed to when generating the figures of of \citet{Watson2019_airgun}.
@@ -240,6 +237,66 @@ where $\Delta p_D$ is the direct signal and $\Delta p_G$ is the ghost arrival, w
 \section{Numerical Implementation}
 The Euler equations inside the air gun are solved using finite difference summation-by-parts operators for spatial derivatives \citep{Svard2014}. The air gun and bubble governing equations are evolved in time using an explicit adaptive Runge-Kutta (4,5) method. The air gun and bubble models are coupled at the interface using the simultaneous-approximation-term framework \citep{Carpenter1994,DelReyFernandez2014a,Svard2014}.
 The reader is referred to \citet{Watson2019_airgun} for more details.
+
+\section{Using {\bf AirGun1D}}
+A script file, \texttt{example.m}, provides an example on how to set up and run a simulation as well as how to plot the outputs. It is important to add the path to the required directories
+\begin{lstlisting}[language=Matlab]
+addpath SBPSAT/
+addpath SeismicAirgunCode
+% addpath sbplib/ % add path to sbplib
+\end{lstlisting}
+
+The example script file defines the discretization (number of grid points per one meter length of source) and the source properties (length, area (port area is equal to the cross-sectional area), depth, and pressure):
+\begin{lstlisting}[language=Matlab]
+% define discretization
+M = 50; % number of grid points per 1m of source length
+
+% source  properties
+src_length = 1.2; % source length (m)
+src_area = 12.5; % cross-sectional area of source (in^2)
+src_depth = 7.5; % source depth (m)
+src_pressure = 1000; % source pressure (psi)
+\end{lstlisting}
+
+The solver is run by calling:
+\begin{lstlisting}[language=Matlab]
+sol = runEulerCode(nx, src_pressure, src_length, src_area, src_depth);
+\end{lstlisting}
+
+\begin{figure}[b!]
+\centering
+\includegraphics[width=\textwidth]{Fig_soly}
+\caption{Format of outputs from \texttt{runEulerCode}.}
+\label{fig:sol y}
+\end{figure}
+
+%% sol.y equation format - for illustrator file
+%\begin{equation}
+%\texttt{sol.y} = 
+%\begin{bmatrix}
+%R(1) & R(2) & \hdots & R(N) \\
+%U(1) & U(2) & \hdots & U(N) \\
+%m_b(1) & m_b(2) & \hdots & m_b(N) \\
+%E_b(1) & E_b(2) & \hdots & E_b(N) \\
+%\rho_0(1) & \rho_0(2) & \hdots & \rho_0(N) \\
+%\rho_0(1) v_0(1) & \rho_0(2) v_0(2)& \hdots & \rho_0(N) v_0(N)\\
+%e_0(1) & e_0(2) & \hdots & e_0(N) \\
+%\vdots & \vdots & & \vdots \\
+%\rho_M(1) & \rho_M(2) & \hdots & \rho_M(N) \\
+%\rho_M(1) v_M(1) & \rho_M(2) v_M(2)& \hdots & \rho_M(N) v_M(N)\\
+%e_M(1) & e_M(2) & \hdots & e_M(N) \\
+%\end{bmatrix}
+%\end{equation}
+
+The time vector is saved in \texttt{sol.x} and has length $N$, where $N$ is the number of time steps. The bubble and airgun variables are saved in \texttt{sol.y}. The bubble variables that are solved for are the bubble radius, $R$, wall velocity, $U = \dot{R} = dR/dt$, mass, $m_b$, and internal energy, $E_b$. The airgun variables are the density, $\rho$, the density multiplied by the velocity, $\rho v$, and the internal energy, $e$. \texttt{sol.y} has dimensions of $(3[M \times L)+1] + 4)~\times~N$ where $M$ is the number of grid points per 1 m of source length and L is the source length, so $M\times L+1$ is the total number of spatial grid points. The format of \texttt{sol.y} is shown in Figure~\ref{fig:sol y}.
+
+
+
+
+
+
+
+
 
 
 
