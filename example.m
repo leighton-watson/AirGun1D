@@ -32,7 +32,7 @@ toc
 t = sol.x; % time vector
 R = sol.y(1,:); % bubble radius
 
-figure(1); subplot(3,1,1);
+figure(1); clf; subplot(3,1,1);
 plot(t, R);
 xlabel('Time (s)');
 ylabel('m'); xlim([0 2]);
@@ -75,7 +75,7 @@ gamma = 1.4; % ratio of heat capacities
 v = rhov./rho; % velocity [m/s]
 p = (gamma-1)*(e-0.5*rho.*v.^2); % pressure
 
-
+% pressure in source
 figure(1); subplot(3,1,3);
 pa2psi = 0.000145038; % conversion from pa to psi
 h = surf(X,T*1000,p*pa2psi);
@@ -86,3 +86,5 @@ ylim([0 20]); xlim([0 src_length]);
 set(h.Parent,'XTick',[0 0.2 0.4 0.6 0.8 1 1.2]);
 hold on;
 title('(c) Source Pressure');
+
+

@@ -266,7 +266,7 @@ sol = runEulerCode(nx, src_pressure, src_length, src_area, src_depth);
 \begin{figure}[b!]
 \centering
 \includegraphics[width=\textwidth]{Fig_soly}
-\caption{Format of outputs from \texttt{runEulerCode}.}
+\caption{Format of outputs from \texttt{runEulerCode}. Value in parenthesis indicates the time step e.g., $1, 2, \hdots, N$ while subscript indicates spatial position for the variables in the source e.g., $1, \hdots, M$.}
 \label{fig:sol y}
 \end{figure}
 
@@ -293,12 +293,9 @@ The time vector is saved in \texttt{sol.x} and has length $N$, where $N$ is the 
 \begin{figure}[h]
 \centering
 \includegraphics[width=\textwidth]{Fig_exampleOutputs}
-\caption{Example outputs showing (a) bubble radius, (b) acoustic pressure from direct arrival, and (c) space-time plot of pressure inside the source. Source is 1.2 m long with a cross-sectional area of 12.5~in$^2$ at a depth of 7.5~m and pressure of 1000~psi.}
+\caption{Example outputs showing (a) bubble radius, (b) acoustic pressure from direct arrival, and (c) space-time plot of pressure inside the source. Source is 1.2 m long with a cross-sectional area of 12.5~in$^2$ at a depth of 7.5~m and pressure of 1000~psi. The port is located at $x=1.2$~m and opens at $t=0$ ms.}
 \label{fig:example outputs}
 \end{figure}
-
-
-
 
 \newpage
 \bibliographystyle{elsarticle-harv}
