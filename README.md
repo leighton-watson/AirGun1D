@@ -8,14 +8,16 @@ This code was used in the paper of Watson, Werpers and Dunham (2019) What contro
 * Clone this repository to your local directory.
 * The 1D air gun code is a finite-difference code that uses summation-by-parts (SBP) operators. In order to run the code you will need to link to also clone the [SBPLib repository](https://bitbucket.org/sbpteam/sbplib) and add that to your MATLAB path.
 * Once SBPLib is added to your MATLAB path you should be able to run the code and start generating figures.
-* Script files for generating the figures of Watson, Werpers and Dunham (2018) are contained in the MakeFigs directory. This script files should provide guidance for how to run the 1D air gun code.
+* There is an example script file in the main directory that will simulate air gun dynamics and plot the bubble radius, acoustic pressure, and pressure inside the source (Figure 3 in the User Guide).
+* Script files for generating the figures of Watson, Werpers and Dunham (2018) are contained in the MakeFigs directory. These script files should provide guidance for how to run the 1D air gun code and display outputs.
 
 ### Organization of the repository ###
 The repository contains several folders:
 * MakeFigs - contains the script files for generating each figure.
 * SBPSAT - 1D air gun code
 * SeismicAirgunCode - lumped parameter model
-* Data - data from Lake Seneca field tests. For more details see [Chelminski et al. (2016)](https://www.epmag.com/low-pressure-source-840586#p=full) or [Ronen and Chelminski (2018)](http://earthdoc.eage.org/publication/publicationdetails/?publication=92131).
+* sbplib - summation-by-parts operators that are required to run code. 
+* Data - data from Lake Seneca field tests. For more details see [Chelminski et al. (2016)](https://www.epmag.com/low-pressure-source-840586#p=full), [Ronen and Chelminski (2018)](http://earthdoc.eage.org/publication/publicationdetails/?publication=92131) or [Ronen et al. (2019)](https://onlinelibrary.wiley.com/doi/abs/10.1111/1365-2478.12774).
 * BubbleCode - bubble models that are compared between in Appendix 1.
 
 ### 1D Air Gun Code ###
@@ -25,7 +27,9 @@ The 1D air gun code is contained in the directory SBPSAT. For details on the cod
 * configAirgun.m - air gun, bubble and ambient properties are defined in this file. For example, the ambient density, gas constant and firing duration are defined in this file. Other parameters, like air gun depth and operating pressure, are defined in the script files.
 * bubbleRHS.m - describes the bubble governing equations. Parameters unique to the bubble, like the surface magnification factor, are defined here.
 
-### Who do I talk to? ###
+### SBPLIB (Summation-by-Parts Library) ###
+* sbplib was developed by Jonatan Werpers, Martin Almquist, Ylva Rydin and Vider Stiernström. The main sbplib repository is [SBPLib repository](https://bitbucket.org/sbpteam/sbplib). Note that there are compatibility issues between the latest version of sbplib and the sbp operators used by AirGun1D. Therefore, it is recommended to use the version of sbplib that is included in the AirGun1D repository.
 
-* Leighton Watson: leightonwatson@stanford.edu
+### Who do I talk to? ###
+* Leighton Watson: leightonwatson@stanford.edu, lwatson2@uoregon.edu
 * Jonatan Werpers: jonatan.werpers@it.uu.se
