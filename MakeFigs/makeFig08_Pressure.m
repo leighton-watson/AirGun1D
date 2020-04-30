@@ -12,6 +12,7 @@ set(0,'DefaultAxesFontSize',24);
 
 % add code directories
 addpath ../SBPSAT
+addpath ../sbplib/
 addpath ../SeismicAirgunCode
 
 cmap = get(gca,'ColorOrder');

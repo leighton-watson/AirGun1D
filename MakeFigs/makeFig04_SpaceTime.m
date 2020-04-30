@@ -13,6 +13,7 @@ set(0,'DefaultAxesFontSize',24);
 
 % add code directories
 addpath ../SBPSAT
+addpath ../sbplib/
 addpath ../SeismicAirgunCode
 
 % set color map

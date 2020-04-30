@@ -11,7 +11,7 @@ cmap = get(gca,'ColorOrder');
 % add code directories
 addpath SBPSAT/
 addpath SeismicAirgunCode/
-% addpath sbplib/ % add path to sbplib
+addpath sbplib/ % add path to sbplib
 
 % define discretization
 nx = 50; % number of grid points per 1m of source length

@@ -17,6 +17,7 @@ set(0,'DefaultAxesFontSize',24);
 
 % add data directory
 addpath ../Data
+addpath ../SBPSAT/
 
 % specify data
 dataStr = '188_0750cm_1030psi_598ci_DHA.csv';

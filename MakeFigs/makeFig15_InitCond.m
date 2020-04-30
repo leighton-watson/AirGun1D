@@ -20,6 +20,7 @@ cmap = get(gca,'ColorOrder');
 addpath ../Data
 addpath ../SeismicAirgunCode/
 addpath ../SBPSAT/
+addpath ../sbplib/
 addpath ../SBPSAT/VariableInitialBubbleVolume/
 
 %% Run Code %%

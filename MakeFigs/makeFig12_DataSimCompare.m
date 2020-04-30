@@ -20,6 +20,7 @@ cmap = get(gca,'ColorOrder');
 addpath ../Data
 addpath ../SeismicAirgunCode/
 addpath ../SBPSAT/
+addpath ../sbplib/
 
 figHand1 = figure(1); clf;
 set(figHand1,'Position',[100 100 600 500]);
